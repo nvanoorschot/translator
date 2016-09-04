@@ -1,6 +1,6 @@
 module Translator
   # Acts as the controller for the Translation class.
-  class TranslationsController < ApplicationController
+  class TranslationsController < ActionController::Base
     # GET translator/translations
     def translations
       render json: I18n.translations.to_json
