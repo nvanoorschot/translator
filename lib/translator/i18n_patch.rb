@@ -3,7 +3,17 @@ module I18n
 
   class << self
     def translations
-      @translations
+      lookups = Translator::Translation.where(key: lookup_keys(@translations)).pluck(:locale, :key, :value)
+
+      @translations.map do |locale, translations|
+        [locale, translations.map do |key, value|
+          [key, lookups.detect { |e| e[0] == locale.to_s && key.to_s == e[1] }&.third]
+        end.to_h]
+      end.to_h
+    end
+
+    def lookup_keys(translations)
+      translations.map { |locale, translation| translation.keys }.flatten.uniq
     end
 
     def translations_reset
@@ -18,9 +28,16 @@ module I18n
     # 'super' will abort itself if no translation was found. Therefore the key is added to the Hash
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
-      @translations[key] = nil
-      @translations[key] = super
+      current_locale = options[:locale] || locale
+      @translations[current_locale] = {} unless @translations[current_locale]
+      @translations[current_locale][key] = nil
+      # @translations[current_locale][key] = super
+      super
     end
     alias_method :t, :translate
+
+    def interpolations(options)
+      options.except(:locale, :default, :raise)
+    end
   end
 end

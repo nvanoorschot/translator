@@ -18,4 +18,6 @@ Gem::Specification.new do |s|
   s.files         = Dir['lib/**/*']
 
   s.add_dependency('i18n-active_record')
+
+  s.add_development_dependency('byebug')
 end

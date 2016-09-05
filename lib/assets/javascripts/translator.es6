@@ -24,17 +24,14 @@ class Translator {
   }
 
   save() {
-    this.postForm('translator/translate', this.modal)
+    this.postForm('translator/translate', this.modal, function () { window.location.reload(true) })
   }
 
   saveButton() {
     var self = this
     var button = document.createElement('button')
     button.innerText = 'Save'
-    button.onclick = function() {
-      self.save()
-      window.location.reload()
-    }
+    button.onclick = function() { self.save() }
     return button
   }
 
@@ -45,14 +42,22 @@ class Translator {
   }
 
   addTranslations(translations) {
+    for (let locale in translations) {
+      this.addTable(locale, translations[locale])
+    }
+  }
+
+  addTable(locale, translations) {
+    let h2 = document.createElement('h2')
+    h2.innerText = locale
     let table = document.createElement('table')
     table.id = 't_table'
 
-    var thead = document.createElement('thead')
-    var tbody = document.createElement('tbody')
-    var row = document.createElement('tr')
-    var key = document.createElement('th')
-    var value = document.createElement('th')
+    let thead = document.createElement('thead')
+    let tbody = document.createElement('tbody')
+    let row = document.createElement('tr')
+    let key = document.createElement('th')
+    let value = document.createElement('th')
     key.innerText = 'Key'
     value.innerText = 'Translation'
     row.appendChild(key)
@@ -67,7 +72,7 @@ class Translator {
       let input = document.createElement('input')
 
       key.innerText = prop
-      input.name = 'translations[' + prop + ']'
+      input.name = 'translations[' + locale + '][' + prop + ']'
       input.value = translations[prop]
       value.appendChild(input)
       row.appendChild(key)
@@ -76,6 +81,7 @@ class Translator {
     }
 
     table.appendChild(tbody)
+    this.modal.appendChild(h2)
     this.modal.appendChild(table)
   }
 
