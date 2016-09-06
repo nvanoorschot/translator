@@ -73,7 +73,7 @@ class Translator {
 
       key.innerText = prop
       input.name = 'translations[' + locale + '][' + prop + ']'
-      input.value = translations[prop]
+      input.value = translations[prop].value
       value.appendChild(input)
       row.appendChild(key)
       row.appendChild(value)
@@ -144,19 +144,3 @@ class Translator {
     return query
   }
 }
-
-;(function () {
-  function addSwitch () {
-    elemDiv = document.createElement('button')
-    elemDiv.style.cssText = 'position:absolute; bottom:0; right:0; z-index:999;'
-    elemDiv.innerText = 'Translate'
-    elemDiv.onclick = function () { new Translator() }
-    document.body.appendChild(elemDiv)
-  }
-
-  // After the turbolinks has loaded the DOM add our translation switch.
-  // Without turbolinks this would be DOMContentLoaded
-  document.addEventListener('turbolinks:load', function() {
-    addSwitch()
-  })
-})()

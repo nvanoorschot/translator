@@ -3,11 +3,12 @@ module I18n
 
   class << self
     def translations
-      lookups = Translator::Translation.where(key: lookup_keys(@translations)).pluck(:locale, :key, :value)
+      lookups = Translator::Translation.where(key: lookup_keys(@translations)).
+                                        pluck(:locale, :key, :value)
 
       @translations.map do |locale, translations|
         [locale, translations.map do |key, value|
-          [key, lookups.detect { |e| e[0] == locale.to_s && e[1] == key.to_s }&.third]
+          [key, value.merge(value: lookups.detect { |e| e[0] == locale.to_s && e[1] == key.to_s }&.third)]
         end.to_h]
       end.to_h
     end
@@ -26,12 +27,16 @@ module I18n
     def translate(key, options = {})
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
-      @translations[current_locale][key] = nil
+      @translations[current_locale][key] = { options: interpolations(options) }
       super
     end
     alias_method :t, :translate
 
     private
+
+    def interpolations(options)
+      options.except(:locale, :default, :raise)
+    end
 
     def lookup_keys(translations)
       translations.map { |locale, translation| translation.keys }.flatten.uniq
