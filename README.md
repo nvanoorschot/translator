@@ -34,15 +34,16 @@ You probably want to place this somewhere down the bottom of your routes.rb beca
 translator_routes
 ```
 
-Call the following Javascript function. You can do this in the console of you favorite browser but
-easier would be if you place a link or button somewhere in your app that executes this function.
+Call the following Javascript function.
 
 ```javascript
 new Translator()
 ```
 
+You can do this in the console of you favorite browser but easier would be if you place a link or button somewhere in your app that executes this function.
+
 ```html
-<a href='#' onclick='new Translator()'>Translate</a>
+<a href='#' onmousedown='new Translator()'>Translate</a>
 ```
 
 # Configuration

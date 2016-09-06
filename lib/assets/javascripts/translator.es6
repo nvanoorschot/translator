@@ -5,8 +5,8 @@ class Translator {
     this.overlay = document.createElement('div')
     this.addModal()
     this.translations = {}
-    this.addOverlay()
     this.getJson('translator/translations', null, function(data) { self.addTranslations(data) })
+    this.addOverlay()
   }
 
   addOverlay() {
@@ -58,10 +58,13 @@ class Translator {
     let row = document.createElement('tr')
     let key = document.createElement('th')
     let value = document.createElement('th')
+    let options = document.createElement('th')
     key.innerText = 'Key'
     value.innerText = 'Translation'
+    options.innerText = 'Options'
     row.appendChild(key)
     row.appendChild(value)
+    row.appendChild(options)
     thead.appendChild(row)
     table.appendChild(thead)
 
@@ -70,13 +73,23 @@ class Translator {
       let key = document.createElement('td')
       let value = document.createElement('td')
       let input = document.createElement('input')
+      let options = document.createElement('td')
 
       key.innerText = prop
       input.name = 'translations[' + locale + '][' + prop + ']'
       input.value = translations[prop].value
+
+      if (Object.getOwnPropertyNames(translations[prop].options).length > 0) {
+        for (let option in translations[prop].options) {
+          options.innerText += '%{' + option + '} = ' + translations[prop].options[option]
+        }
+        // options.innerText = JSON.parse(translations[prop].options)
+      }
+
       value.appendChild(input)
       row.appendChild(key)
       row.appendChild(value)
+      row.appendChild(options)
       tbody.appendChild(row)
     }
 

@@ -26,6 +26,7 @@ module I18n
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
       current_locale = options[:locale] || locale
+      options.except!(:default)
       @translations[current_locale] = {} unless @translations[current_locale]
       @translations[current_locale][key] = { options: interpolations(options) }
       super
@@ -35,11 +36,11 @@ module I18n
     private
 
     def interpolations(options)
-      options.except(:locale, :default, :raise)
+      options.except(:locale, :default, :raise, :throw)
     end
 
     def lookup_keys(translations)
-      translations.map { |locale, translation| translation.keys }.flatten.uniq
+      translations.map { |_locale, translation| translation.keys }.flatten.uniq
     end
   end
 end
