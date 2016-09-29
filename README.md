@@ -20,10 +20,10 @@ Add the javascripts to your: app/assets/javascripts/application.js
 //= require translator
 ```
 
-app/controllers/application_conroller.rb
+Include this module in your main controller: app/controllers/application_conroller.rb
 
 ```ruby
-include Translator
+include Translator::Reset
 ```
 
 Place this function in your: app/config/routes.rb
