@@ -5,13 +5,13 @@ Webinterface for Rails i18n-activerecord
 add Translator to your: Gemfile
 
 ```ruby
-gem 'translator, github: 'forecastxl/translator`
+gem 'translator', git: 'https://github.com/forecastxl/translator.git'
 ```
 
 Add the styles to your: app/assets/stylesheets/application.css
 
 ```
-*= require translator`
+*= require translator
 ```
 
 Add the javascripts to your: app/assets/javascripts/application.js

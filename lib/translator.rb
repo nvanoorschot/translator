@@ -5,6 +5,7 @@ require 'translator/engine'
 require 'translator/routes'
 
 module Translator
+  # Adds before_action to the host controller it was included in.
   def self.included(base)
     base.before_action :translations_reset
   end
