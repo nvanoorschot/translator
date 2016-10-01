@@ -76,7 +76,6 @@ change that you can copy the translator.js to your project and edit it your own 
 # TODO
   - Add tests
   - Make it independent from:
-    - es6
     - sass
   - Better styling of modal
   - Add close button to modal

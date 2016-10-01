@@ -13,6 +13,8 @@ module I18n
       end.to_h
     end
 
+    # Clears the @translations variable. If not cleared the variable would continue to grow with new
+    # translations on each .
     def translations_reset
       @translations = {}
     end
@@ -26,7 +28,7 @@ module I18n
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
       current_locale = options[:locale] || locale
-      options.except!(:default)
+      options.except!(:default) if Translator.disable_default_translations
       @translations[current_locale] = {} unless @translations[current_locale]
       @translations[current_locale][key] = { options: interpolations(options) }
       super
@@ -35,10 +37,14 @@ module I18n
 
     private
 
+    # @param options [Hash] with the options as passed to the translate function.
+    # @return [Hash] with the options that are relevant for the translator.
     def interpolations(options)
-      options.except(:locale, :default, :raise, :throw)
+      options.except(:locale, :default, :raise, :throw, :scope, :default)
     end
 
+    # @params translations [Array] that holds all of the translatable items.
+    # @return [Array] with all unique translatable keys.
     def lookup_keys(translations)
       translations.map { |_locale, translation| translation.keys }.flatten.uniq
     end
