@@ -10,8 +10,7 @@ module Translator
   mattr_accessor :disable_default_translations
   @@disable_default_translations = false
 
-  # Default way to setup Simple Form. Run rails generate simple_form:install
-  # to create a fresh initializer with all configuration values.
+  # Load the settings from the host app.
   def self.setup
     yield self
   end

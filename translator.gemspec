@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'translator/version'
 
 Gem::Specification.new do |s|
@@ -13,13 +13,11 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://www.forecastxl.com'
   s.license     = 'MIT'
 
-  s.required_ruby_version = ">= 2.3"
+  s.required_ruby_version = '>= 2.3'
   s.require_paths = ['lib', 'lib/translator', 'lib/assets/javascripts', 'lib/assets/stylesheets']
   s.files         = Dir['lib/**/*']
 
-  s.add_dependency('i18n-active_record')
-  s.add_dependency('sass-rails')
-  s.add_dependency('babel-transpiler')
+  s.add_dependency 'i18n-active_record'
 
-  s.add_development_dependency('byebug')
+  s.add_development_dependency 'pry'
 end

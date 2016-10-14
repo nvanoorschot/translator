@@ -3,14 +3,15 @@ module I18n
 
   class << self
     def translations
-      lookups = Translator::Translation.where(key: lookup_keys(@translations)).
-                                        pluck(:locale, :key, :value)
+      # lookups = Translator::Translation.where(key: lookup_keys(@translations)).
+      #                                   pluck(:locale, :key, :value)
 
-      @translations.map do |locale, translations|
-        [locale, translations.map do |key, value|
-          [key, value.merge(value: lookups.detect { |e| e[0] == locale.to_s && e[1] == key.to_s }&.third)]
-        end.to_h]
-      end.to_h
+      # @translations.map do |locale, translations|
+      #   [locale, translations.map do |key, options|
+      #     [key, options.merge(value: lookups.detect { |e| e[0] == locale.to_s && e[1] == key.to_s }&.third)]
+      #   end.to_h]
+      # end.to_h
+      @translations
     end
 
     # Clears the @translations variable. If not cleared the variable would continue to grow with new
@@ -31,7 +32,7 @@ module I18n
       options.except!(:default) if Translator.disable_default_translations
       @translations[current_locale] = {} unless @translations[current_locale]
       @translations[current_locale][key] = { options: interpolations(options) }
-      super
+      @translations[current_locale][key][:value] = super
     end
     alias_method :t, :translate
 
@@ -40,7 +41,7 @@ module I18n
     # @param options [Hash] with the options as passed to the translate function.
     # @return [Hash] with the options that are relevant for the translator.
     def interpolations(options)
-      options.except(:locale, :default, :raise, :throw, :scope, :default)
+      options.except(*I18n::RESERVED_KEYS)
     end
 
     # @params translations [Array] that holds all of the translatable items.

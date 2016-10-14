@@ -46,6 +46,21 @@ You can do this in the console of you favorite browser but easier would be if yo
 <a href='#' onmousedown='new Translator()'>Translate</a>
 ```
 
+### Apartment
+
+If you have the apartment gem included in your project make sure to add the translation classes to your list of excluded models (assuming that you do not want to store translations per tenant):
+
+```ruby
+Apartment.configure do |config|
+  config.excluded_models = %w(
+    I18n::Backend::ActiveRecord::Translation
+    Translator::Translation
+  )
+end
+
+```
+
+
 # Configuration
 
 ### Security
@@ -68,23 +83,21 @@ translator_routes if Rails.env.staging?
 
 ### Styling
 
-If you don't like the way the modal looks you can override the styles or define your own. Just make sure that you css is required later in the application.css file then the translate.css. If you don´t like any of it you can choose not to require the translator.css altogether.
+If you don't like the way the modal looks you can override the styles or define your own. Just make sure that your css is required later in the application.css file then the translator.css. If you don´t like any of it you can choose not to require the translator.css altogether.
 
 There is no html you can edit because all DOM elements are created on the fly by javascript. If you want to
-change that you can copy the translator.js to your project and edit it your own liking. Do not forget the remove the require statement from application.js.
+change that you can copy the translator.js to your project and edit it your own liking.
 
 # TODO
+  - Fix the more complex interpolation in the modal
+    - When getting the result from t() then the interpolations already took place
+    - How to get the string that will be used for the interpolations?
   - Add tests
-  - Make it independent from:
-    - sass
-  - Better styling of modal
-  - Add close button to modal
-  - Show interpolations send to the translate function, maybe switch between interpolated or not,
-    this is usefull when no translation yet exist so the translator can see which interpolations are
-    send to the translate function.
-  - Retreive the translations only once (and clear the cache at the same time?)
 
+# Nice to haves
+  - Retreive the translations only once? (and clear the cache at the same time?)
   - Start modal with keys without translation
   - Show the translation of a key in different languages
   - Show the result of Google translate (or similar webservice)
   - Warn when one or more translations are missing. Maybe directly open the modal when any are missing.
+  - Maybe show all translations have been tried before the current one was found. This shows the translator and developer which translations are looked up without success.
