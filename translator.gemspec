@@ -13,11 +13,11 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://www.forecastxl.com'
   s.license     = 'MIT'
 
+  # Requirements
   s.required_ruby_version = '>= 2.3'
   s.require_paths = ['lib', 'lib/translator', 'lib/assets/javascripts', 'lib/assets/stylesheets']
   s.files         = Dir['lib/**/*']
 
+  # the gem only works with the activerecord backend, for now.
   s.add_dependency 'i18n-active_record'
-
-  s.add_development_dependency 'pry'
 end

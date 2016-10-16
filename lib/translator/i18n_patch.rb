@@ -22,16 +22,16 @@ module I18n
 
     # Adds every lookup of a translation to a separate Hash.
     # This Hash will contain all translations used in the current session.
-    # Watch out for gems like SimpleForm for they will look a translation in multiple places
-    # resulting in more translations being requested then are relevant.
+    # Watch out for gems like SimpleForm for they will look for a translation in multiple places
+    # resulting in more translations being requested then are actually used.
     #
     # 'super' will abort itself if no translation was found. Therefore the key is added to the Hash
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
       current_locale = options[:locale] || locale
-      options.except!(:default) if Translator.disable_default_translations
       @translations[current_locale] = {} unless @translations[current_locale]
       @translations[current_locale][key] = { options: interpolations(options) }
+      @translations[current_locale][key][:defaults] ||= options[:default] || []
       @translations[current_locale][key][:value] = super
     end
     alias_method :t, :translate
@@ -41,7 +41,7 @@ module I18n
     # @param options [Hash] with the options as passed to the translate function.
     # @return [Hash] with the options that are relevant for the translator.
     def interpolations(options)
-      options.except(*I18n::RESERVED_KEYS)
+      options.except(*I18n::RESERVED_KEYS, :locale)
     end
 
     # @params translations [Array] that holds all of the translatable items.

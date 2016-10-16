@@ -1,9 +1,12 @@
 require 'translator/i18n_patch'
 require 'translator/translation'
-require 'translator/translations_controller'
-require 'translator/engine'
-require 'translator/routes'
 require 'translator/reset'
+
+if defined?(Rails)
+  require 'translator/engine'
+  require 'translator/routes'
+  require 'translator/translations_controller'
+end
 
 module Translator
   # Disable the ability to pass default translations to the I18n.translate function.

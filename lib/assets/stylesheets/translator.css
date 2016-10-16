@@ -12,7 +12,6 @@
 .Modal {
   display: -webkit-box;
   display: -moz-box;
-  display: box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -57,7 +56,6 @@
 .Table {
   display: -webkit-box;
   display: -moz-box;
-  display: box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -101,7 +99,6 @@
   .Table-row {
     display: -webkit-box;
     display: -moz-box;
-    display: box;
     display: -webkit-flex;
     display: -moz-flex;
     display: -ms-flexbox;
@@ -120,7 +117,6 @@
 .Table-row-item {
   display: -webkit-box;
   display: -moz-box;
-  display: box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flexbox;
@@ -158,8 +154,8 @@
 }
 
 .Table-row-item textarea {
-  padding: 0.2rem;
+  padding: 0.2em;
   resize: vertical;
-  min-height: 1rem;
+  height: 2em;
   font-size: 1rem;
 }

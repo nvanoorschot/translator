@@ -15,19 +15,19 @@ module Translator
         end
       end
 
-      clear_cache(options.keys) if I18n.cache_store
+      clear_cache(options.keys) if I18n.respond_to?(:cache_store) && I18n.cache_store
     end
 
     def self.clear_cache(locales)
       case I18n.cache_store
       when ActiveSupport::Cache::RedisStore
         locales.each do |locale|
-          # TODO (Nicke) use scan instead of keys to iterate over collection.
+          # TODO: use scan instead of keys to iterate over collection.
           # redis.del(redis.scan(0, match: "i18n//#{locale}/*").presence)
           redis.del(redis.keys("i18n//#{locale}/*").presence)
         end
       else
-        raise 'Only the Redis cache_store is implemented. Switch to Redis or add your own logic.'
+        warn 'Only the Redis cache_store is implemented. Switch to Redis or submit a issue/PR.'
       end
     end
 
