@@ -3,13 +3,13 @@ module Translator
   class TranslationsController < ActionController::Base
     # GET translator/translations
     def translations
-      render json: I18n.translations.to_json
+      render json: I18n.translations.to_json, status: 200
     end
 
     # POST translator/translate
     def translate
       Translator::Translation.translate(translate_params)
-      render json: 'ok'
+      render json: { result: 'ok' }, status: 200
     end
 
     private

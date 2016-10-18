@@ -10,13 +10,13 @@ gem 'translator', git: 'https://github.com/forecastxl/translator.git'
 
 Add the styles to your: app/assets/stylesheets/application.css
 
-```
+```css
 *= require translator
 ```
 
 Add the javascripts to your: app/assets/javascripts/application.js
 
-```
+```javascript
 //= require translator
 ```
 
@@ -58,6 +58,25 @@ Apartment.configure do |config|
   )
 end
 
+```
+
+
+# Migration
+
+If you have already have translations in a certain backend and decide to move to a different one you can run a task to copy the translations into the new backend.
+
+* Make sure the target backend exists before copying
+* The task copies the translations to the target, it will NOT destroy the translations in the source
+* If any keys already exist in the target backend then their values will be overwritten
+* Keys in the target backend that do not exist in the source will remain untouched
+
+### Limitations
+
+* At this moment only the possible to copy from simple(yaml) to activerecord backend.
+
+
+```console
+rake translator:simple_to_activerecord
 ```
 
 
