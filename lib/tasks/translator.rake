@@ -4,6 +4,8 @@ namespace :translator do
   task simple_to_activerecord: :environment do
     backend = I18n::Backend::Simple.new
     Dir.glob("#{Rails.root.to_s}/config/locales/*.yml") do |file|
+      puts "Loading #{file}"
+
       YAML.load_file(file).each do |locale, translations|
         join_keys(translations).each do |key, value|
           Translator::Translation.create(locale: locale, key: key, value: value)
@@ -20,9 +22,22 @@ namespace :translator do
       if value.is_a?(Hash)
         keys += join_keys(value, full_key)
       elsif !value.nil?
-        keys << [full_key.join('.'), value]
+        keys << [full_key.join('.'), parse_value(value)]
       end
       keys
+    end
+  end
+
+  def parse_value(value)
+    case value
+    when Array
+      "---\n" + value.map { |e| "- #{e}" }.join("\n")
+    when true
+      "\001"
+    when false
+      "\002"
+    else
+      value
     end
   end
 end
