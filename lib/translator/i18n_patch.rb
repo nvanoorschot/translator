@@ -19,13 +19,22 @@ module I18n
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
       value = super
-      return value if value.is_a?(Hash)
-
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
-      @translations[current_locale][key] = { options: interpolations(options) }
-      @translations[current_locale][key][:defaults] ||= options[:default] || []
-      @translations[current_locale][key][:value] = return_value(value, options)
+
+      if value.is_a?(Hash)
+        value.each do |sub_key, sub_value|
+          lookup_key = [key.to_s, sub_key.to_s].join('.')
+          @translations[current_locale][lookup_key] = { options: interpolations(options) }
+          @translations[current_locale][lookup_key][:defaults] = []
+          @translations[current_locale][lookup_key][:value] = sub_value
+        end
+      else
+        @translations[current_locale][key] = { options: interpolations(options) }
+        @translations[current_locale][key][:defaults] ||= options[:default] || []
+        @translations[current_locale][key][:value] = return_value(value.dup, options)
+      end
+
       value
     end
     alias t translate
@@ -46,18 +55,18 @@ module I18n
 
     def return_value(value, options)
       return if value[/\Atranslation missing: /]
+
       reverse_interpolation(value, options)
     end
 
     def reverse_interpolation(value, options)
       return value.to_s if interpolations(options).empty?
-      unpolated = value.dup
 
       interpolations(options).each do |key, interpolation|
-        unpolated.gsub!(%r{#{interpolation}}, "%{#{key}}")
+        value.gsub!(%r{#{interpolation}}, "%{#{key}}")
       end
 
-      unpolated
+      value
     end
   end
 end
