@@ -114,6 +114,9 @@
     background-color: #f2f2f2;
   }
 }
+.Table-row.attention {
+  background-color: yellow;
+}
 .Table-row-item {
   display: -webkit-box;
   display: -moz-box;

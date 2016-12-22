@@ -2,17 +2,7 @@ module I18n
   @translations = {}
 
   class << self
-    def translations
-      # lookups = Translator::Translation.where(key: lookup_keys(@translations)).
-      #                                   pluck(:locale, :key, :value)
-
-      # @translations.map do |locale, translations|
-      #   [locale, translations.map do |key, options|
-      #     [key, options.merge(value: lookups.detect { |e| e[0] == locale.to_s && e[1] == key.to_s }&.third)]
-      #   end.to_h]
-      # end.to_h
-      @translations
-    end
+    attr_reader :translations
 
     # Clears the @translations variable. If not cleared the variable would continue to grow with new
     # translations on each .
@@ -28,13 +18,17 @@ module I18n
     # 'super' will abort itself if no translation was found. Therefore the key is added to the Hash
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
+      value = super
+      return value if value.is_a?(Hash)
+
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
       @translations[current_locale][key] = { options: interpolations(options) }
       @translations[current_locale][key][:defaults] ||= options[:default] || []
-      @translations[current_locale][key][:value] = super
+      @translations[current_locale][key][:value] = return_value(value, options)
+      value
     end
-    alias_method :t, :translate
+    alias t translate
 
     private
 
@@ -48,6 +42,22 @@ module I18n
     # @return [Array] with all unique translatable keys.
     def lookup_keys(translations)
       translations.map { |_locale, translation| translation.keys }.flatten.uniq
+    end
+
+    def return_value(value, options)
+      return if value[/\Atranslation missing: /]
+      reverse_interpolation(value, options)
+    end
+
+    def reverse_interpolation(value, options)
+      return value.to_s if interpolations(options).empty?
+      unpolated = value.dup
+
+      interpolations(options).each do |key, interpolation|
+        unpolated.gsub!(%r{#{interpolation}}, "%{#{key}}")
+      end
+
+      unpolated
     end
   end
 end

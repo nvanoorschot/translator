@@ -2,8 +2,7 @@
 namespace :translator do
   # Stores all translations found in locale yamls in the ActiveRecord database.
   task simple_to_activerecord: :environment do
-    backend = I18n::Backend::Simple.new
-    Dir.glob("#{Rails.root.to_s}/config/locales/*.yml") do |file|
+    Dir.glob("#{Rails.root}/config/locales/*.yml") do |file|
       puts "Loading #{file}"
 
       YAML.load_file(file).each do |locale, translations|
@@ -28,6 +27,8 @@ namespace :translator do
     end
   end
 
+  # @param [Object] can be a String, Array or Boolean.
+  # @return [String] that represents the given object in a String.
   def parse_value(value)
     case value
     when Array
