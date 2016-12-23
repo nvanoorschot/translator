@@ -18,6 +18,8 @@ module I18n
     # 'super' will abort itself if no translation was found. Therefore the key is added to the Hash
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
+      # Do not pass 'raise' since it will abort in super if no translation was found.
+      options.except!(:raise)
       value = super
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]

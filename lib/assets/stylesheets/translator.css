@@ -117,6 +117,9 @@
 .Table-row.attention {
   background-color: yellow;
 }
+.Table-row.Table-header {
+  font-size: bold;
+}
 .Table-row-item {
   display: -webkit-box;
   display: -moz-box;
