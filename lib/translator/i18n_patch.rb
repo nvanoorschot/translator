@@ -56,7 +56,7 @@ module I18n
     end
 
     def return_value(value, options)
-      return if value[/\Atranslation missing: /]
+      return if value.is_a?(String) && value[/\Atranslation missing: /]
 
       reverse_interpolation(value, options)
     end
