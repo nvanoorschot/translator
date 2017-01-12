@@ -28,12 +28,13 @@ module I18n
         value.each do |sub_key, sub_value|
           lookup_key = [key.to_s, sub_key.to_s].join('.')
           @translations[current_locale][lookup_key] = { options: interpolations(options) }
-          @translations[current_locale][lookup_key][:defaults] = []
           @translations[current_locale][lookup_key][:value] = sub_value
         end
+      elsif value.is_a?(Array)
+        @translations[current_locale][key] = { options: interpolations(options) }
+        @translations[current_locale][key][:value] = value.to_yaml
       else
         @translations[current_locale][key] = { options: interpolations(options) }
-        @translations[current_locale][key][:defaults] ||= options[:default] || []
         @translations[current_locale][key][:value] = return_value(value.dup, options)
       end
 

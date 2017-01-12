@@ -160,6 +160,7 @@
 }
 
 .Table-row-item textarea {
+  width: 100%;
   padding: 0.2em;
   resize: vertical;
   height: 2em;
