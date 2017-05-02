@@ -1,3 +1,4 @@
+# The main namespace for this gem.
 module Translator
   # Disable the ability to pass default translations to the I18n.translate function.
   mattr_accessor :disable_default_translations

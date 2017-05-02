@@ -1,3 +1,4 @@
+# Open the I18n module to add our functions and overrides.
 module I18n
   @translations = {}
 
@@ -18,8 +19,11 @@ module I18n
     # 'super' will abort itself if no translation was found. Therefore the key is added to the Hash
     # before the lookup takes place. This ensures we can translate untranslated keys.
     def translate(key, options = {})
-      # Do not pass 'raise' since it will abort in super if no translation was found.
-      options.except!(:raise)
+      # Do not pass 'raise' or 'throw' since it will abort in super if no translation was found.
+      # Do not pass 'object' since it will cause Redis to throw an error 'Cannot dump File'.
+      # TODO: find out why this is. Maybe it tries to cache the object as part of the
+      options.except!(:raise, :throw, :object)
+
       value = super
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
@@ -66,7 +70,7 @@ module I18n
       return value.to_s if interpolations(options).empty?
 
       interpolations(options).each do |key, interpolation|
-        value.gsub!(%r{#{interpolation}}, "%{#{key}}")
+        value.gsub!(/#{interpolation}/, "%{#{key}}")
       end
 
       value
