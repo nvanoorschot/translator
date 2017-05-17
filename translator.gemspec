@@ -21,4 +21,9 @@ Gem::Specification.new do |s|
 
   # the gem only works with the activerecord backend, for now.
   s.add_dependency 'i18n-active_record'
+
+  s.add_development_dependency 'activerecord'
+  s.add_development_dependency 'cucumber'
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'minitest'
 end
