@@ -21,25 +21,29 @@ module I18n
     def translate(key, options = {})
       # Do not pass 'raise' or 'throw' since it will abort in super if no translation was found.
       # Do not pass 'object' since it will cause Redis to throw an error 'Cannot dump File'.
-      # TODO: find out why this is. Maybe it tries to cache the object as part of the
+      # TODO: find out why this is. Maybe it tries to cache the object as part of the cache key.
       options.except!(:raise, :throw, :object)
 
       value = super
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
+      path = lookup_key(value, key, options)
 
       if value.is_a?(Hash)
         value.each do |sub_key, sub_value|
-          lookup_key = [key.to_s, sub_key.to_s].join('.')
-          @translations[current_locale][lookup_key] = { options: interpolations(options) }
-          @translations[current_locale][lookup_key][:value] = sub_value
+          lookup_key = [path, sub_key].join('.')
+          @translations[current_locale][lookup_key] = {
+            options: interpolations(options), value: sub_value
+          }
         end
       elsif value.is_a?(Array)
-        @translations[current_locale][key] = { options: interpolations(options) }
-        @translations[current_locale][key][:value] = value.to_yaml
+        @translations[current_locale][path] = {
+          options: interpolations(options), value: value.to_yaml
+        }
       else
-        @translations[current_locale][key] = { options: interpolations(options) }
-        @translations[current_locale][key][:value] = return_value(value.dup, options)
+        @translations[current_locale][path] = {
+          options: interpolations(options), value: return_value(value.dup, options)
+        }
       end
 
       value
@@ -58,6 +62,30 @@ module I18n
     # @return [Array] with all unique translatable keys.
     def lookup_keys(translations)
       translations.map { |_locale, translation| translation.keys }.flatten.uniq
+    end
+
+    # @return [String] that is the full path to a translation.
+    def lookup_key(value, key, options = {})
+      scope(options).push(key).push(pluralization(value, options)).compact.join('.')
+    end
+
+    # @return [Array] with the scope of the translation.
+    def scope(options)
+      case options[:scope]
+      when nil
+        []
+      when Array
+        options[:scope]
+      when String, Symbol
+        [options[:scope].to_s]
+      end
+    end
+
+    # @return [String] the pluralization key.
+    def pluralization(value, options)
+      count = options[:count]
+      return nil if count.nil? || reverse_interpolation(value.dup, options) != value
+      count == 1 ? 'one' : 'other'
     end
 
     def return_value(value, options)

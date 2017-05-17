@@ -28,22 +28,22 @@ include Translator::Reset
 
 Place this function in your: app/config/routes.rb
 
-You probably want to place this somewhere down the bottom of your routes.rb because these routes will not be called often and/or are not vital to the working of your app.
+Tip: place this somewhere down the bottom of your routes.rb if this not called often or if it is not vital to the working of your app.
 
 ```ruby
 translator_routes
 ```
 
-Call the following Javascript function.
-
-```javascript
-new Translator()
-```
-
-You can do this in the console of you favorite browser but easier would be if you place a link or button somewhere in your app that executes this function.
+Add the 'translator' css class to any html element you want to trigger the translator popup.
 
 ```html
-<a href='#' onmousedown='new Translator()'>Translate</a>
+<a href='#' class='translator'>Translate</a>
+```
+
+You can also call the following Javascript function directly to make the translator modal open.
+
+```javascript
+new Translator().openModal()
 ```
 
 ### Apartment
