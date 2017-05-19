@@ -25,6 +25,7 @@ module I18n
       options.except!(:raise, :throw, :object)
 
       value = super
+
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
       path = lookup_key(value, key, options)

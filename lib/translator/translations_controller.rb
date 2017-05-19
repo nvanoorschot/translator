@@ -3,7 +3,7 @@ module Translator
   class TranslationsController < ActionController::Base
     # GET translator/translations
     def translations
-      render json: I18n.translations.to_json, status: 200
+      render json: ordered_translations.to_json, status: 200
     end
 
     # POST translator/translate
@@ -17,6 +17,13 @@ module Translator
     # @return [Param] with whitelisted parameters.
     def translate_params
       params.require(:translations)
+    end
+
+    # @return [Hash] with the keys in alphabetic order and first the untranslated keys
+    def ordered_translations
+      I18n.translations.map do |locale, keys|
+        [locale, keys.sort_by { |key, options| key && (options[:value] || '') }.to_h]
+      end.to_h
     end
   end
 end
