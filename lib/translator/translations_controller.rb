@@ -22,7 +22,7 @@ module Translator
     # @return [Hash] with the keys in alphabetic order and first the untranslated keys
     def ordered_translations
       I18n.translations.map do |locale, keys|
-        [locale, keys.sort_by { |key, options| key && (options[:value] || '') }.to_h]
+        [locale, keys.sort_by { |key, options| [options[:value] ? 1 : 0, key] }.to_h]
       end.to_h
     end
   end
