@@ -19,19 +19,25 @@ module Translator
 
       private
 
-      # Deletes both the Symbol and String version of the key. It matters.
       def clear_cache(locales)
         case I18n.cache_store
         when ActiveSupport::Cache::RedisStore
-          locales.each do |locale, translations|
-            translations.each do |key, _value|
-              redis.del(redis.keys(cache_key(locale, key.to_s)).presence)
-              redis.del(redis.keys(cache_key(locale, key.to_sym)).presence)
-            end
-          end
+          clear_redis(locales)
         else
           warn 'Only the Redis cache_store is implemented. Switch to Redis or submit a PR.'
         end
+      end
+
+      # Deletes both the Symbol and String version of the key. It matters.
+      def clear_redis(locales)
+        caches = locales.map do |locale, translations|
+          translations.map do |key, _value|
+            redis.keys(cache_key(locale, key.to_s)) + redis.keys(cache_key(locale, key.to_sym))
+          end
+        end.flatten
+
+        return 0 if caches.empty?
+        redis.del(caches)
       end
 
       # @return [String] that is the key which the cached values is stored under.
