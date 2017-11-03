@@ -8,15 +8,15 @@ module Translator
 
     # POST translator/translate
     def translate
-      Translator::Translation.translate(translate_params)
-      render json: { result: 'ok' }, status: 200
+      Translator::Translation.translate(translate_params[:translations].to_h)
+      head :ok
     end
 
     private
 
     # @return [Param] with whitelisted parameters.
     def translate_params
-      params.require(:translations)
+      params.permit(translations: I18n.available_locales.map { |e| [e, {}] }.to_h)
     end
 
     # @return [Hash] with the keys in alphabetic order and first the untranslated keys
