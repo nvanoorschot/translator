@@ -8,8 +8,11 @@ module Translator
 
     # POST translator/translate
     def translate
-      Translator::Translation.translate(translate_params[:translations].to_h)
-      head :ok
+      if Translator::Translation.translate(translate_params[:translations].to_h)
+        render json: { result: 'ok' }, status: 200
+      else
+        render json: { result: 'failed' }, status: 400
+      end
     end
 
     private

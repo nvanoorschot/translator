@@ -22,32 +22,33 @@ module I18n
       # Do not pass 'raise' or 'throw' since it will abort in super if no translation was found.
       # Do not pass 'object' since it will cause Redis to throw an error 'Cannot dump File'.
       # TODO: find out why this is. Maybe it tries to cache the object as part of the cache key.
-      options.except!(:raise, :throw, :object)
+      # options.except!(:raise, :throw, :object)
 
-      value = super
+      value = super(key, options)
 
       current_locale = options[:locale] || locale
       @translations[current_locale] = {} unless @translations[current_locale]
-      path = lookup_key(value, key, options)
+      @translations[current_locale][key] = value
+      # path = lookup_key(value, key, options)
+      #
+      # if value.is_a?(Hash)
+      #   value.each do |sub_key, sub_value|
+      #     lookup_key = [path, sub_key].join('.')
+      #     @translations[current_locale][lookup_key] = {
+      #       options: interpolations(options), value: sub_value
+      #     }
+      #   end
+      # elsif value.is_a?(Array)
+      #   @translations[current_locale][path] = {
+      #     options: interpolations(options), value: value.to_yaml
+      #   }
+      # else
+      #   @translations[current_locale][path] = {
+      #     options: interpolations(options), value: return_value(value.dup, options)
+      #   }
+      # end
 
-      if value.is_a?(Hash)
-        value.each do |sub_key, sub_value|
-          lookup_key = [path, sub_key].join('.')
-          @translations[current_locale][lookup_key] = {
-            options: interpolations(options), value: sub_value
-          }
-        end
-      elsif value.is_a?(Array)
-        @translations[current_locale][path] = {
-          options: interpolations(options), value: value.to_yaml
-        }
-      else
-        @translations[current_locale][path] = {
-          options: interpolations(options), value: return_value(value.dup, options)
-        }
-      end
-
-      value
+      # value
     end
     alias t translate
 
