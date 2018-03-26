@@ -9,7 +9,7 @@ module Translator
     # POST translator/translate
     def translate
       Translator::Translation.translate(translate_params[:translations].to_h)
-      head :ok
+      render json: true, status: 200
     end
 
     private
