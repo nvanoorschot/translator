@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Open the I18n module to add our functions and overrides.
 module I18n
   @translations = {}
@@ -6,7 +8,7 @@ module I18n
     attr_reader :translations
 
     # Clears the @translations variable. If not cleared the variable would continue to grow with new
-    # translations on each .
+    # translations on each request.
     def translations_reset
       @translations = {}
     end
@@ -43,7 +45,7 @@ module I18n
         }
       else
         @translations[current_locale][path] = {
-          options: interpolations(options), value: return_value(value.dup, options)
+          options: interpolations(options), value: return_value(value)
         }
       end
 
@@ -67,7 +69,7 @@ module I18n
 
     # @return [String] that is the full path to a translation.
     def lookup_key(value, key, options = {})
-      scope(options).push(key).push(pluralization(value, options)).compact.join('.')
+      scope(options).push(key).compact.join('.')
     end
 
     # @return [Array] with the scope of the translation.
@@ -82,26 +84,8 @@ module I18n
       end
     end
 
-    # @return [String] the pluralization key.
-    def pluralization(value, options)
-      count = options[:count]
-      return nil if count.nil? || reverse_interpolation(value.dup, options) != value
-      count == 1 ? 'one' : 'other'
-    end
-
-    def return_value(value, options)
+    def return_value(value)
       return if value.is_a?(String) && value[/\Atranslation missing: /]
-
-      reverse_interpolation(value, options)
-    end
-
-    def reverse_interpolation(value, options)
-      return value.to_s if interpolations(options).empty?
-
-      interpolations(options).each do |key, interpolation|
-        value.gsub!(/#{interpolation}/, "%{#{key}}")
-      end
-
       value
     end
   end

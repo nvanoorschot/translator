@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Translator
   class Translation < ActiveRecord::Base
     # VALIDATIONS

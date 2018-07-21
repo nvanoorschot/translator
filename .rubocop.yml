@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 
 # Lines must be 100 chars or less, default 80.
 Metrics/LineLength:
@@ -8,10 +8,6 @@ Metrics/LineLength:
 # Allow variable assignment in combination with 'if' and 'case' statements.
 Lint/EndAlignment:
   EnforcedStyleAlignWith: variable
-
-# Disable check on magic comment to freeze literal string.
-Style/FrozenStringLiteralComment:
-  Enabled: false
 
 # Ensures that the assignment operator and the rhs are on separate lines
 # for the set of supported types.

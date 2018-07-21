@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The main namespace for this gem.
 module Translator
   # Disable the ability to pass default translations to the I18n.translate function.

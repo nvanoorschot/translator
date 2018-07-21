@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given(/^the following translations exist$/) do |table|
   params = {}
   table.hashes.each do |row|

@@ -1,5 +1,4 @@
-# require 'bundler/gem_tasks'
-# require 'cucumber'
+# frozen_string_literal: true
 
 desc 'Run tests'
 task :test do

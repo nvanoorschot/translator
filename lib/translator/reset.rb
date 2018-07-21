@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Translator
   # module that adds functions to clear the translations from the cache.
   module Reset

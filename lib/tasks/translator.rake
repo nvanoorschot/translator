@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Holds the tasks in its own namespace
 namespace :translator do
   # Stores all translations found in locale yamls in the ActiveRecord database.
@@ -32,7 +34,7 @@ namespace :translator do
   def parse_value(value)
     case value
     when Array
-      "---\n" + value.map { |e| "- #{e}" }.join("\n")
+      "---\n" + value.map { |item| "- #{item}" }.join("\n")
     when true
       "\001"
     when false

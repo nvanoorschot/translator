@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Translator
   # Acts as the controller for the Translation class.
   class TranslationsController < ActionController::Base
@@ -16,7 +18,7 @@ module Translator
 
     # @return [Param] with whitelisted parameters.
     def translate_params
-      params.permit(translations: I18n.available_locales.map { |e| [e, {}] }.to_h)
+      params.permit(translations: I18n.available_locales.map { |locale| [locale, {}] }.to_h)
     end
 
     # @return [Hash] with the keys in alphabetic order and first the untranslated keys
