@@ -34,7 +34,11 @@ Tip: place this somewhere down the bottom of your routes.rb if this not called o
 translator_routes
 ```
 
-Add the 'translator' css class to any html element you want to trigger the translator popup.
+Add the 'translator' css class to any html element you want to trigger the translator popup. It will add a click event to the event, that will open the modal.
+There is a 2 second delay in the assignment of the clickhandler to allow any async event to be fired and trigger more translation lookups.
+To any element with the 'translator' class the 'translator-attention' will be added when 1 or more untranslated keys are found, 
+you can attach your own styles to this class to attract attention of the translators.
+You can also add the 'translator-counter' class to any element. A span will be created in that element with the number of untranslated keys on that page.
 
 ```html
 <a href='#' class='translator'>Translate</a>
