@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   # Requirements
-  s.required_ruby_version = ['>= 2.3.0', '< 2.6.0']
+  s.required_ruby_version = ['>= 2.3.0', '< 2.7.0']
   s.require_paths = ['lib', 'lib/translator', 'lib/assets/javascripts', 'lib/assets/stylesheets']
   s.files         = Dir['lib/**/*']
 
